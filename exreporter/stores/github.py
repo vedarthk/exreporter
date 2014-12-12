@@ -52,6 +52,8 @@ class GithubStore(object):
         :params culprit: string used to identify the cause of the issue,
             also used for aggregation
         :params labels: (optional) list of labels attached to the issue
+        :returns: issue object
+        :rtype: :class:`exreporter.stores.github.GithubIssue`
         '''
         issues = self.search(q=culprit)
         self.time_delta = kwargs.pop('time_delta')
@@ -66,6 +68,14 @@ class GithubStore(object):
                 title=title, body=body, **kwargs)
 
     def search(self, q, state='open,closed', **kwargs):
+        """Search for issues in Github.
+
+        :param q: query string to search
+        :param state: state of the issue
+        :returns: list of issue objects
+        :rtype: list
+
+        """
         search_result = self.github_request.search(q=q, state=state, **kwargs)
         if search_result['total_count'] > 0:
             return list(
@@ -75,6 +85,15 @@ class GithubStore(object):
             )
 
     def handle_issue_comment(self, issue, title, body, **kwargs):
+        """Decides whether to comment or create a new issue when trying to comment.
+
+        :param issue: issue on which the comment is to be added
+        :param title: title of the issue if new one is to be created
+        :param body: body of the issue/comment to be created
+        :returns: newly created issue or the one on which comment was created
+        :rtype: :class:`exreporter.stores.github.GithubIssue`
+
+        """
         if self._is_time_delta_valid(issue.updated_time_delta):
             if issue.comments_count < self.max_comments:
                 issue.comment(body=body)
@@ -86,7 +105,13 @@ class GithubStore(object):
         return delta > self.time_delta
 
     def create_issue(self, title, body, labels=None):
-        """Creates a new issue and return the object of :class:`GithubIssue`
+        """Creates a new issue in Github.
+
+        :params title: title of the issue to be created
+        :params body: body of the issue to be created
+        :params labels: (optional) list of labels for the issue
+        :returns: newly created issue
+        :rtype: :class:`exreporter.stores.github.GithubIssue`
         """
         kwargs = self.github_request.create(
             title=title, body=body, labels=labels)
@@ -133,6 +158,8 @@ class GithubIssue(object):
         """Adds a comment to the issue.
 
         :params body: body, content of the comment
+        :returns: issue object
+        :rtype: :class:`exreporter.stores.github.GithubIssue`
         """
         self.github_request.comment(issue=self, body=body)
 
@@ -142,6 +169,15 @@ class GithubIssue(object):
 
 
 class GithubRequest(object):
+    """This class objects are created with valid credentials.
+    The objects have methods to create/update issues and to add comments on Github.
+
+    Basic Usage:
+      >>> from exreporter.stores.github import GithubCredentials, GithubRequest
+      >>> gc = GithubCredentials(user="username", repo="repo name", auth_token="personla auth token")
+      >>> gr = GithubRequest(credentials=gc)
+      >>> gr.create(title="title", body="body", labels=['labels'])
+    """
 
     def __init__(self, credentials):
         self.user = credentials.user
@@ -152,6 +188,17 @@ class GithubRequest(object):
         })
 
     def create(self, title, body, labels):
+        """Create an issue in Github.
+        For JSON data returned by Github refer:
+        https://developer.github.com/v3/issues/#create-an-issue
+
+        :param title: title of the issue
+        :param body: body of the issue
+        :param labels: list of labels for the issue
+        :returns: dict of JSON data returned by Github of newly created issue
+        :rtype: `dict`
+
+        """
         url = "https://api.github.com/repos/{}/{}/issues".format(
             self.user, self.repo)
 
@@ -169,6 +216,16 @@ class GithubRequest(object):
         return json.loads(response.content)
 
     def comment(self, issue, body):
+        """Comment on existing issue on Github.
+        For JSON data returned by Github refer:
+        https://developer.github.com/v3/issues/comments/#create-a-comment
+
+        :param issue: object of exisiting issue
+        :param body: body of the comment
+        :returns: dict of JSON data returned by Github of the new comment
+        :rtype: `dict`
+
+        """
         url = issue.comments_url
         data = {'body': body}
 
@@ -178,6 +235,15 @@ class GithubRequest(object):
         return json.loads(response.content)
 
     def update(self, issue, **kwargs):
+        """Update an existing issue on Github.
+        For JSON data returned by Github refer:
+        https://developer.github.com/v3/issues/#edit-an-issue
+
+        :param issue: object existing issue
+        :returns: dict of JSON data returned by Github.
+        :rtype: `dict`
+
+        """
         url = issue.url
 
         response = self.session.patch(url, json.dumps(kwargs))
@@ -186,6 +252,17 @@ class GithubRequest(object):
         return json.loads(response.content)
 
     def search(self, q, state, labels=None):
+        """Search for issues in Github.
+        For JSON data returned by Github refer:
+        https://developer.github.com/v3/search/#search-issues
+
+        :param q: query string for search
+        :param state: the states of the issue
+        :param labels: labels of the issue
+        :returns: dictionary of JSON data returned by Github
+        :rtype: `dict`
+
+        """
         # TODO: add support for search with labels
         q = "{}+state:{}".format(q, '+state:'.join(state.split(',')))
         sort = "updated"
