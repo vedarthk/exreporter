@@ -21,8 +21,7 @@ test_requirements = map(
 setup(
     name='exreporter',
     version='0.1.0',
-    description='Creates and aggregates exceptions for internal server'
-    ' errors in HTTP requests, exceptions in background tasks.',
+    description='Report Issues',
     long_description=readme + '\n\n' + history,
     author='Vedarth Kulkarni',
     author_email='vedarthk@vedarthz.in',
