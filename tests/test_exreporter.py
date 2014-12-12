@@ -25,7 +25,7 @@ class TestExreporter(unittest.TestCase):
         exreporter.report_issue(credentials=credentials, store_name=store_name)
 
         reporter.report.assert_called_once_with(
-            max_comments=50, include_locals=True, labels=['Bug'])
+            max_comments=50, include_locals=True, labels=['Bug'], time_delta=10)
 
     @patch('exreporter.exreporter.report_issue')
     def test_report_github_issue_with_defaults(self, report_issue):
@@ -34,7 +34,7 @@ class TestExreporter(unittest.TestCase):
         exreporter.report_github_issue(credentials=credentials)
 
         report_issue.assert_called_once_with(
-            credentials=credentials, store_name=Stores.github)
+            credentials=credentials, store_name='github')
 
 if __name__ == '__main__':
     unittest.main()
