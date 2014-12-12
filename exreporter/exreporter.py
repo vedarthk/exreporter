@@ -43,4 +43,4 @@ def report_github_issue(credentials, **kwargs):
     Returns :class:`GithubIssue` object.
     '''
     return report_issue(
-        credentials=credentials, store_name=Stores.github, **kwargs)
+        credentials=credentials, store_name='github', **kwargs)
