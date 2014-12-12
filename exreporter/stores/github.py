@@ -141,7 +141,8 @@ class GithubRequest(object):
     def __init__(self, credentials):
         self.user = credentials.user
         self.repo = credentials.repo
-        self.session = requests.Session(headers={
+        self.session = requests.Session()
+        self.session.headers.update({
             'Authorization': 'token {}'.format(credentials.auth_token)
         })
 
