@@ -41,6 +41,7 @@ class StackTrace(object):
                         'lineno': lineno
                     }
                 )
+            trace = trace.tb_next
 
         if custom_module_data:
             data = custom_module_data.pop(-1)
@@ -51,5 +52,5 @@ class StackTrace(object):
 
     @property
     def stack_trace_text(self):
-        return traceback.format_exception(
-            self.exception, self.exception_value, self.traceback)
+        return '\n'.join(traceback.format_exception(
+            self.exception, self.exception_value, self.traceback))

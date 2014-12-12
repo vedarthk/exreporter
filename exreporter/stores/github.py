@@ -54,6 +54,8 @@ class GithubStore(object):
         :params labels: (optional) list of labels attached to the issue
         '''
         issues = self.search(q=culprit)
+        self.time_delta = kwargs.pop('time_delta')
+        self.max_comments = kwargs.pop('max_comments')
 
         if issues:
             latest_issue = issues.pop(0)
@@ -79,6 +81,9 @@ class GithubStore(object):
                 return issue
             else:
                 return self.create_issue(title=title, body=body, **kwargs)
+
+    def _is_time_delta_valid(self, delta):
+        return delta > self.time_delta
 
     def create_issue(self, title, body, labels=None):
         """Creates a new issue and return the object of :class:`GithubIssue`
@@ -121,7 +126,7 @@ class GithubIssue(object):
     def open_issue(self):
         """Changes the state of issue to 'open'.
         """
-        self.github_request.update(state='open')
+        self.github_request.update(issue=self, state='open')
         self.state = 'open'
 
     def comment(self, body):
@@ -147,7 +152,8 @@ class GithubRequest(object):
         })
 
     def create(self, title, body, labels):
-        url = ""
+        url = "https://api.github.com/repos/{}/{}/issues".format(
+            self.user, self.repo)
 
         data = {
             'title': title,
@@ -162,8 +168,8 @@ class GithubRequest(object):
         assert response.status_code == 201
         return json.loads(response.content)
 
-    def comment(self, body):
-        url = ""
+    def comment(self, issue, body):
+        url = issue.comments_url
         data = {'body': body}
 
         response = self.session.post(url, json.dumps(data))
@@ -171,8 +177,8 @@ class GithubRequest(object):
         assert response.status_code == 201
         return json.loads(response.content)
 
-    def update(self, **kwargs):
-        url = ""
+    def update(self, issue, **kwargs):
+        url = issue.url
 
         response = self.session.patch(url, json.dumps(kwargs))
 
@@ -185,9 +191,9 @@ class GithubRequest(object):
         sort = "updated"
 
         url = "https://api.github.com/search/"\
-              "issues?q={}+repo:{}&sort={}".format(q, self.repo, sort)
+              "issues?q={}+repo:{}/{}&sort={}".format(
+                  q, self.user, self.repo, sort)
 
         response = self.session.get(url)
-
         assert response.status_code == 200
         return json.loads(response.content)

@@ -18,7 +18,7 @@ def report_issue(credentials, store_name, **kwargs):
     '''Reports an issue for any exception in application code to the specified store.
 
     :params credentials: object of store specific credentials from `exreporter.credentials`
-    :params store: object of any store specified in `exreporter.stores`
+    :params store_name: name of the issue store eg: 'github'
     :params title_format: (optional) string to specify the format of issue title
     :params body_format: (optional) string to specify the format of issue body
     :params extra_content: (optional) extra content that is to be added to issue body
@@ -28,6 +28,7 @@ def report_issue(credentials, store_name, **kwargs):
     :params labels: (optional) list of labels that are to be applied to the issue, default: ``['Bug']``
     '''
     kwargs.setdefault('max_comments', 50)
+    kwargs.setdefault('time_delta', 10)
     kwargs.setdefault('include_locals', True)
     kwargs.setdefault('labels', ['Bug'])
     reporter = Reporter(credentials=credentials, store_name=store_name)

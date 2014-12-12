@@ -15,8 +15,8 @@ class Reporter(object):
 
     def report(self, **kwargs):
         trace_info = StackTrace()
-        title_format = kwargs.get('title_format', Formats.title)
-        body_format = kwargs.get('body_format', Formats.body)
+        title_format = kwargs.pop('title_format', Formats.title)
+        body_format = kwargs.pop('body_format', Formats.body)
 
         culprit = Formats.culprit.format(
             filepath=trace_info.filepath, lineno=trace_info.lineno,
@@ -29,10 +29,18 @@ class Reporter(object):
 
         body = "{}".format(
             body_format.format(stack_trace=trace_info.stack_trace_text))
-        if kwargs.get('include_locals', False):
+
+        if kwargs.pop('include_locals', False):
             body = "{} {}".format(
                 body, Formats.locals_format.format(
-                    locals_data=self.trace_locals)
+                    locals_data=trace_info.locals_data)
+            )
+
+        extra_content = kwargs.pop('extra_content', '')
+
+        if extra_content:
+            body = "{}\n\nExtra Content:\n{}".format(
+                body, extra_content
             )
 
         if kwargs.get('request'):
@@ -48,5 +56,4 @@ class Reporter(object):
 """.format(body, culprit)
 
         return self.store.create_or_update_issue(
-            title=title, body=body, culprit=culprit,
-            labels=kwargs.get('labels'))
+            title=title, body=body, culprit=culprit, **kwargs)
