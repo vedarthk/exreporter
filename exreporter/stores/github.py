@@ -14,7 +14,7 @@ import json
 import pytz
 import datetime
 import requests
-from dateutil.tz import tz_local
+from dateutil.tz import tzlocal
 
 
 class GithubCredentials(object):
@@ -111,7 +111,7 @@ class GithubIssue(object):
     def updated_time_delta(self):
         """Returns the number of seconds ago the issue was updated from current time.
         """
-        local_timezone = tz_local()
+        local_timezone = tzlocal()
         update_at = datetime.datetime.strptime(self.updated_at, '%Y-%m-%dT%XZ')
         update_at_utc = pytz.utc.localize(update_at)
         update_at_local = update_at_utc.astimezone(local_timezone)
