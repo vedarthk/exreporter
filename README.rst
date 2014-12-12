@@ -1,5 +1,5 @@
 ===============================
-Create issues in Github for internal server errors or exceptions in background tasks.
+Exreporter: Report Internal Server Errors
 ===============================
 
 .. image:: https://badge.fury.io/py/exreporter.png
@@ -8,16 +8,35 @@ Create issues in Github for internal server errors or exceptions in background t
 .. image:: https://travis-ci.org/vedarthk/exreporter.png?branch=master
         :target: https://travis-ci.org/vedarthk/exreporter
 
-.. image:: https://pypip.in/d/exreporter/badge.png
-        :target: https://pypi.python.org/pypi/exreporter
+Exreporter is an MIT Licensed library, written in Python to report internal server errors and exceptions in background applications to issue trackers such as Github.
 
+This will help in reducing the dependency on error emails for internal server error notifications and to manage them in a single, right place. Reported issues contain everything a developer needs, debugging got a whole lot simpler.
 
-Creates and aggregates exceptions for internal server errors in HTTP requests, exceptions in background tasks.
+Also it should be easy to use:
 
-* Free software: BSD license
-* Documentation: https://exreporter.readthedocs.org.
+.. code-block:: python
+
+    from exreporter.credentials import GithubCredentials
+    from exreporter import exreporter
+    credentials = GithubCredentials(user="username", repo="repo-name", auth_token="personal-token")
+    exreporter.report_github_issue(credentials=credentials, labels=['Bug'])
+
 
 Features
 --------
 
-* TODO
+- Creates issues in issue trackers
+- Aggregate same kind of issues
+- Handle multiple occurences
+
+
+Documentation
+-------------
+
+Documentation is available at https://exreporter.readthedocs.org/.
+
+
+TODOS
+-----
+
+#. Add support for Bitbucket
