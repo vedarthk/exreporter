@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import sys
+import traceback
 
 
 class StackTrace(object):
@@ -47,3 +48,8 @@ class StackTrace(object):
                     data['locals_data'], data['lineno'])
         else:
             return (filepath, method_name, locals_data, lineno)
+
+    @property
+    def stack_trace_text(self):
+        return traceback.format_exception(
+            self.exception, self.exception_value, self.traceback)
