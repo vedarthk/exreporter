@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Create issues in Github for internal server errors or exceptions in background tasks.'s documentation!
+Welcome to Exreporter's documentation!
 ======================================
 
 Contents:
