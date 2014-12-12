@@ -10,7 +10,6 @@ This module implements interface for Exporter library.
 
 """
 
-from .stores import Stores
 from .reporter import Reporter
 
 
