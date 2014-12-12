@@ -3,7 +3,7 @@
 
 
 try:
-    from setuptools import setup
+    from setuptools import setup, find_packages
 except ImportError:
     from distutils.core import setup
 
@@ -27,9 +27,7 @@ setup(
     author='Vedarth Kulkarni',
     author_email='vedarthk@vedarthz.in',
     url='https://github.com/vedarthk/exreporter',
-    packages=[
-        'exreporter',
-    ],
+    packages=find_packages(),
     package_dir={'exreporter':
                  'exreporter'},
     include_package_data=True,
