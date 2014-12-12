@@ -55,7 +55,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Create issues in Github for internal server errors or exceptions in background tasks.'
+project = u'Exreporter'
 copyright = u'2014, Vedarth Kulkarni'
 
 # The version info for the project you're documenting, acts as replacement
