@@ -1,6 +1,6 @@
-===============================
+=========================================
 Exreporter: Report Internal Server Errors
-===============================
+=========================================
 
 .. image:: https://badge.fury.io/py/exreporter.png
     :target: http://badge.fury.io/py/exreporter
@@ -27,7 +27,7 @@ Features
 
 - Creates issues in issue trackers
 - Aggregate same kind of issues
-- Handle multiple occurences
+- Handle multiple occurrence
 
 
 Usage
