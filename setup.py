@@ -21,7 +21,7 @@ test_requirements = map(
 setup(
     name='exreporter',
     version='0.1.0',
-    description='Report Issues',
+    description='Report Internal Server Errors as Issues',
     long_description=readme + '\n\n' + history,
     author='Vedarth Kulkarni',
     author_email='vedarthk@vedarthz.in',
