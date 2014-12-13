@@ -20,7 +20,7 @@ from dateutil.tz import tzlocal
 class GithubCredentials(object):
     """Github credentials.
 
-    Stores necessary credentials required to access/create/update issues on Github.
+    Necessary credentials to access/create/update issues on Github.
 
     Basic Usage:
 
@@ -33,6 +33,8 @@ class GithubCredentials(object):
 
 
 class GithubStore(object):
+    """Github Issue Store.
+    """
 
     def __init__(self, credentials):
         '''Initializes Github issue store.
@@ -119,6 +121,8 @@ class GithubStore(object):
 
 
 class GithubIssue(object):
+    """Python object representation of issue on Github.
+    """
 
     def __init__(self, github_request, **kwargs):
         """Initializes Github issue object.
