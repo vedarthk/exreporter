@@ -30,6 +30,12 @@ Features
 - Handle multiple occurences
 
 
+Usage
+--------
+
+Usage reference available at https://exreporter.readthedocs.org/en/latest/usage.html
+
+
 Documentation
 -------------
 
