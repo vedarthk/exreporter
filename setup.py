@@ -12,11 +12,16 @@ from pip.req import parse_requirements
 readme = open('README.rst').read()
 history = open('HISTORY.rst').read().replace('.. :changelog:', '')
 
-requirements = map(
-    lambda r: str(r.req), parse_requirements('requirements.txt'))
+requirements = [
+    'requests',
+    'pytz',
+    'python-dateutil',
+]
 
-test_requirements = map(
-    lambda r: str(r.req), parse_requirements('test-requirements.txt'))
+test_requirements = requirements.extend([
+    'mock',
+    'magicmock',
+])
 
 setup(
     name='exreporter',
