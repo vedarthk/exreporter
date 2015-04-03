@@ -3,6 +3,4 @@
 from .github import GithubStore
 
 
-class Stores(object):
-
-    github = GithubStore
+__all__ = [GithubStore]
