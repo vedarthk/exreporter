@@ -17,9 +17,13 @@ Also it should be easy to use:
 .. code-block:: python
 
     from exreporter.credentials import GithubCredentials
-    from exreporter import exreporter
-    credentials = GithubCredentials(user="username", repo="repo-name", auth_token="personal-token")
-    exreporter.report_github_issue(credentials=credentials, labels=['Bug'])
+    from exreporter.stores import GithubStore
+    from exreporter import ExReporter
+    gc = GithubCredentials(user="username", repo="repo-name", auth_token="personal-token")
+    gs = GithubStore(credentials=gc)
+    reporter = ExReporter(store=gs, labels=['Bug'])
+
+    reporter.report()
 
 
 Features
