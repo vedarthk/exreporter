@@ -25,7 +25,7 @@ test_requirements = requirements.extend([
 
 setup(
     name='exreporter',
-    version='0.1.2',
+    version='0.1.3',
     description='Report Internal Server Errors as Issues',
     long_description=readme + '\n\n' + history,
     author='Vedarth Kulkarni',
