@@ -46,7 +46,7 @@ class GithubStore(object):
         self.credentials = credentials
         self.github_request = GithubRequest(credentials=credentials)
 
-    def create_or_update_issue(self, title, body, culprit, **kwargs):
+    def create_or_update_issue(self, title, body, culprit, labels, **kwargs):
         '''Creates or comments on existing issue in the store.
 
         :params title: title for the issue
@@ -57,7 +57,7 @@ class GithubStore(object):
         :returns: issue object
         :rtype: :class:`exreporter.stores.github.GithubIssue`
         '''
-        issues = self.search(q=culprit)
+        issues = self.search(q=culprit, labels=labels)
         self.time_delta = kwargs.pop('time_delta')
         self.max_comments = kwargs.pop('max_comments')
 
@@ -69,7 +69,7 @@ class GithubStore(object):
             return self.create_issue(
                 title=title, body=body, **kwargs)
 
-    def search(self, q, state='open,closed', **kwargs):
+    def search(self, q, labels, state='open,closed', **kwargs):
         """Search for issues in Github.
 
         :param q: query string to search
@@ -234,8 +234,8 @@ class GithubRequest(object):
         data = {'body': body}
 
         response = self.session.post(url, json.dumps(data))
-
         assert response.status_code == 201
+
         return json.loads(response.content)
 
     def update(self, issue, **kwargs):
@@ -255,7 +255,7 @@ class GithubRequest(object):
         assert response.status_code == 200
         return json.loads(response.content)
 
-    def search(self, q, state, labels=None):
+    def search(self, q, state, labels):
         """Search for issues in Github.
         For JSON data returned by Github refer:
         https://developer.github.com/v3/search/#search-issues
@@ -268,7 +268,9 @@ class GithubRequest(object):
 
         """
         # TODO: add support for search with labels
-        q = "{}+state:{}".format(q, '+state:'.join(state.split(',')))
+        labels = ['"{}"'.format(label) for label in labels]
+        q = "'{}'+state:{}+label:{}".format(
+            q, '+state:'.join(state.split(',')), ','.join(labels))
         sort = "updated"
 
         url = "https://api.github.com/search/"\

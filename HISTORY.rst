@@ -13,3 +13,9 @@ History
 
 * Change development status to Alpha.
 * Also add contrib module - django_middlewares
+
+ 0.1.2 (2015-04-04)
+---------------------
+
+* Change public API
+* Refactor github issue search

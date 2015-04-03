@@ -18,7 +18,8 @@ Requires following Django settings to be present:
 
 from django.conf import settings
 from exreporter.credentials import GithubCredentials
-from exreporter import exreporter
+from exreporter.stores import GithubStore
+from exreporter import ExReporter
 
 
 class ExreporterGithubMiddleware(object):
@@ -28,10 +29,12 @@ class ExreporterGithubMiddleware(object):
     def process_exception(self, request, exception):
         """Report exceptions from requests via Exreporter.
         """
-        credentials = GithubCredentials(
+        gc = GithubCredentials(
             user=settings.EXREPORTER_GITHUB_USER,
             repo=settings.EXREPORTER_GITHUB_REPO,
             auth_token=settings.EXREPORTER_GITHUB_AUTH_TOKEN)
+        gs = GithubStore(credentials=gc)
+        reporter = ExReporter(
+            store=gs, labels=settings.EXREPORTER_GITHUB_LABELS)
 
-        exreporter.report_github_issue(
-            credentials=credentials, labels=settings.EXREPORTER_GITHUB_LABELS)
+        reporter.report()

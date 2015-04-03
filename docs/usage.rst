@@ -6,12 +6,16 @@ To use Exreporter in any project:
 
 .. code-block:: python
 
-    from exreporter import exreporter
+    from exreporter import ExREporter
     from exreporter.credentials import GithubCredentials
+    from exreporter.stores import GithubStore
 
-    credentials = GithubCredentials(
+    gc = GithubCredentials(
         user="username", repo="reponame", auth_token="personaltoken")
-    exreporter.report_github_issue(credentials=credentials, labels=['Bug'])
+    gs = GithubStore(credentials=gc)
+    reporter = ExREporter(store=gs)
+
+    reporter.report()
 
 
 
